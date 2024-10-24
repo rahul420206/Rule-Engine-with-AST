@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rule Engine with AST</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .form-section, .rules-section {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .form-section h2, .rules-section h2 {
+            margin-top: 0;
+        }
+
+        input[type="text"], input[type="number"] {
+            width: calc(100% - 120px);
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 8px 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        .rule-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .rule-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .rule-item span {
+            margin-right: 10px;
+        }
+
+        .rule-actions button {
+            margin-left: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Rule Engine with AST</h1>
+
+        <!-- Form Section for Creating and Updating Rules -->
+        <div class="form-section">
+            <h2>Create/Update Rule</h2>
+            <input type="text" id="rule-input" placeholder="Enter rule (e.g., age > 18)" />
+            <input type="hidden" id="rule-id" />
+            <button onclick="createOrUpdateRule()">Save Rule</button>
+        </div>
+
+        <!-- Section to Display Rules -->
+        <div class="rules-section">
+            <h2>Existing Rules</h2>
+            <ul id="rules-list" class="rule-list"></ul>
+        </div>
+
+        <!-- Section for Combining Rules -->
+        <div class="form-section">
+            <h2>Combine Rules</h2>
+            <select id="operator-select">
+                <option value="AND">AND</option>
+                <option value="OR">OR</option>
+            </select>
+            <button onclick="combineRules()">Combine Selected Rules</button>
+            <div id="combined-result"></div>
+        </div>
+
+        <!-- Section for Evaluating a Rule -->
+        <div class="form-section">
+            <h2>Evaluate a Rule</h2>
+            <form action="/evaluate_rule_form" method="POST">
+                <label for="age">Age:</label>
+                <input type="number" id="age" name="age" required><br>
+
+                <label for="department">Department:</label>
+                <input type="text" id="department" name="department" required><br>
+
+                <label for="salary">Salary:</label>
+                <input type="number" id="salary" name="salary" required><br>
+
+                <label for="experience">Experience:</label>
+                <input type="number" id="experience" name="experience" required><br>
+
+                <button type="submit">Evaluate Rule</button>
+            </form>
+
+            <div>
+                <h3>Evaluation Result:</h3>
+                <p>{{ result if result else 'No evaluation done yet.' }}</p>
+            </div>
+
+            <div>
+                <h3>Stored Inputs (Satisfied the Rule):</h3>
+                <table border="2">
+                    <tr>
+                        <th>Age</th>
+                        <th>Department</th>
+                        <th>Salary</th>
+                        <th>Experience</th>
+                    </tr>
+                    {% for input in stored_inputs %}
+                    <tr>
+                        <td>{{ input.age }}</td>
+                        <td>{{ input.department }}</td>
+                        <td>{{ input.salary }}</td>
+                        <td>{{ input.experience }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load existing rules when the page is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchRules();
+        });
+
+        // Function to create or update a rule
+        function createOrUpdateRule() {
+            const ruleInput = document.getElementById('rule-input').value;
+            const ruleId = document.getElementById('rule-id').value;
+
+            if (!ruleInput) {
+                alert('Please enter a rule');
+                return;
+            }
+
+            const url = ruleId ? `/update_rule/${ruleId}` : '/create_rule';
+            const method = ruleId ? 'PUT' : 'POST';
+
+            fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ rule_string: ruleInput })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert('Error: ' + data.error);
+                } else {
+                    alert('Rule saved successfully');
+                    fetchRules(); // Refresh the rule list
+                    document.getElementById('rule-input').value = '';
+                    document.getElementById('rule-id').value = '';
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        // Fetch all rules from the server
+        function fetchRules() {
+            fetch('/rules')
+                .then(response => response.json())
+                .then(data => {
+                    const rulesList = document.getElementById('rules-list');
+                    rulesList.innerHTML = ''; // Clear the list
+
+                    Object.keys(data).forEach(id => {
+                        const rule = data[id].rule_string;
+                        const listItem = document.createElement('li');
+                        listItem.className = 'rule-item';
+
+                        // Create rule display with actions
+                        listItem.innerHTML = `
+                            <span>${id}: ${rule}</span>
+                            <div class="rule-actions">
+                                <button onclick="editRule('${id}', '${rule}')">Edit</button>
+                                <button onclick="deleteRule('${id}')">Delete</button>
+                                <input type="checkbox" class="combine-checkbox" value="${id}">
+                            </div>
+                        `;
+                        rulesList.appendChild(listItem);
+                    });
+                })
+                .catch(error => console.error('Error fetching rules:', error));
+        }
+
+        // Edit a rule (populate the input field for updating)
+        function editRule(id, rule) {
+            document.getElementById('rule-input').value = rule;
+            document.getElementById('rule-id').value = id;
+        }
+
+        // Delete a rule
+        function deleteRule(id) {
+            if (!confirm('Are you sure you want to delete this rule?')) return;
+
+            fetch(`/delete_rule/${id}`, { method: 'DELETE' })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    fetchRules(); // Refresh the rule list
+                })
+                .catch(error => console.error('Error deleting rule:', error));
+        }
+
+        // Combine selected rules
+        function combineRules() {
+            const checkboxes = document.querySelectorAll('.combine-checkbox:checked');
+            const selectedRuleIds = Array.from(checkboxes).map(cb => cb.value);
+
+            if (selectedRuleIds.length < 2) {
+                alert('Select at least two rules to combine.');
+                return;
+            }
+
+            const operator = document.getElementById('operator-select').value;
+
+            fetch('/combine_rules', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ rule_ids: selectedRuleIds, operator: operator })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert('Error: ' + data.error);
+                } else {
+                    const resultDiv = document.getElementById('combined-result');
+                    resultDiv.innerHTML = `<h3>Combined Rule:</h3><p>${data.combined_rule}</p>`;
+                }
+            })
+            .catch(error => console.error('Error combining rules:', error));
+        }
+    </script>
+</body>
+</html>

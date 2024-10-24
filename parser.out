@@ -1,0 +1,450 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> expression
+Rule 1     expression -> expression AND expression
+Rule 2     expression -> expression OR expression
+Rule 3     expression -> expression GT expression
+Rule 4     expression -> expression LT expression
+Rule 5     expression -> expression EQ expression
+Rule 6     expression -> LPAREN expression RPAREN
+Rule 7     expression -> ATTRIBUTE GT NUMBER
+Rule 8     expression -> ATTRIBUTE LT NUMBER
+Rule 9     expression -> ATTRIBUTE EQ STRING
+
+Terminals, with rules where they appear
+
+AND                  : 1
+ATTRIBUTE            : 7 8 9
+EQ                   : 5 9
+GT                   : 3 7
+LPAREN               : 6
+LT                   : 4 8
+NUMBER               : 7 8
+OR                   : 2
+RPAREN               : 6
+STRING               : 9
+error                : 
+
+Nonterminals, with rules where they appear
+
+expression           : 1 1 2 2 3 3 4 4 5 5 6 0
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . expression
+    (1) expression -> . expression AND expression
+    (2) expression -> . expression OR expression
+    (3) expression -> . expression GT expression
+    (4) expression -> . expression LT expression
+    (5) expression -> . expression EQ expression
+    (6) expression -> . LPAREN expression RPAREN
+    (7) expression -> . ATTRIBUTE GT NUMBER
+    (8) expression -> . ATTRIBUTE LT NUMBER
+    (9) expression -> . ATTRIBUTE EQ STRING
+
+    LPAREN          shift and go to state 2
+    ATTRIBUTE       shift and go to state 3
+
+    expression                     shift and go to state 1
+
+state 1
+
+    (0) S' -> expression .
+    (1) expression -> expression . AND expression
+    (2) expression -> expression . OR expression
+    (3) expression -> expression . GT expression
+    (4) expression -> expression . LT expression
+    (5) expression -> expression . EQ expression
+
+    AND             shift and go to state 4
+    OR              shift and go to state 5
+    GT              shift and go to state 6
+    LT              shift and go to state 7
+    EQ              shift and go to state 8
+
+
+state 2
+
+    (6) expression -> LPAREN . expression RPAREN
+    (1) expression -> . expression AND expression
+    (2) expression -> . expression OR expression
+    (3) expression -> . expression GT expression
+    (4) expression -> . expression LT expression
+    (5) expression -> . expression EQ expression
+    (6) expression -> . LPAREN expression RPAREN
+    (7) expression -> . ATTRIBUTE GT NUMBER
+    (8) expression -> . ATTRIBUTE LT NUMBER
+    (9) expression -> . ATTRIBUTE EQ STRING
+
+    LPAREN          shift and go to state 2
+    ATTRIBUTE       shift and go to state 3
+
+    expression                     shift and go to state 9
+
+state 3
+
+    (7) expression -> ATTRIBUTE . GT NUMBER
+    (8) expression -> ATTRIBUTE . LT NUMBER
+    (9) expression -> ATTRIBUTE . EQ STRING
+
+    GT              shift and go to state 10
+    LT              shift and go to state 11
+    EQ              shift and go to state 12
+
+
+state 4
+
+    (1) expression -> expression AND . expression
+    (1) expression -> . expression AND expression
+    (2) expression -> . expression OR expression
+    (3) expression -> . expression GT expression
+    (4) expression -> . expression LT expression
+    (5) expression -> . expression EQ expression
+    (6) expression -> . LPAREN expression RPAREN
+    (7) expression -> . ATTRIBUTE GT NUMBER
+    (8) expression -> . ATTRIBUTE LT NUMBER
+    (9) expression -> . ATTRIBUTE EQ STRING
+
+    LPAREN          shift and go to state 2
+    ATTRIBUTE       shift and go to state 3
+
+    expression                     shift and go to state 13
+
+state 5
+
+    (2) expression -> expression OR . expression
+    (1) expression -> . expression AND expression
+    (2) expression -> . expression OR expression
+    (3) expression -> . expression GT expression
+    (4) expression -> . expression LT expression
+    (5) expression -> . expression EQ expression
+    (6) expression -> . LPAREN expression RPAREN
+    (7) expression -> . ATTRIBUTE GT NUMBER
+    (8) expression -> . ATTRIBUTE LT NUMBER
+    (9) expression -> . ATTRIBUTE EQ STRING
+
+    LPAREN          shift and go to state 2
+    ATTRIBUTE       shift and go to state 3
+
+    expression                     shift and go to state 14
+
+state 6
+
+    (3) expression -> expression GT . expression
+    (1) expression -> . expression AND expression
+    (2) expression -> . expression OR expression
+    (3) expression -> . expression GT expression
+    (4) expression -> . expression LT expression
+    (5) expression -> . expression EQ expression
+    (6) expression -> . LPAREN expression RPAREN
+    (7) expression -> . ATTRIBUTE GT NUMBER
+    (8) expression -> . ATTRIBUTE LT NUMBER
+    (9) expression -> . ATTRIBUTE EQ STRING
+
+    LPAREN          shift and go to state 2
+    ATTRIBUTE       shift and go to state 3
+
+    expression                     shift and go to state 15
+
+state 7
+
+    (4) expression -> expression LT . expression
+    (1) expression -> . expression AND expression
+    (2) expression -> . expression OR expression
+    (3) expression -> . expression GT expression
+    (4) expression -> . expression LT expression
+    (5) expression -> . expression EQ expression
+    (6) expression -> . LPAREN expression RPAREN
+    (7) expression -> . ATTRIBUTE GT NUMBER
+    (8) expression -> . ATTRIBUTE LT NUMBER
+    (9) expression -> . ATTRIBUTE EQ STRING
+
+    LPAREN          shift and go to state 2
+    ATTRIBUTE       shift and go to state 3
+
+    expression                     shift and go to state 16
+
+state 8
+
+    (5) expression -> expression EQ . expression
+    (1) expression -> . expression AND expression
+    (2) expression -> . expression OR expression
+    (3) expression -> . expression GT expression
+    (4) expression -> . expression LT expression
+    (5) expression -> . expression EQ expression
+    (6) expression -> . LPAREN expression RPAREN
+    (7) expression -> . ATTRIBUTE GT NUMBER
+    (8) expression -> . ATTRIBUTE LT NUMBER
+    (9) expression -> . ATTRIBUTE EQ STRING
+
+    LPAREN          shift and go to state 2
+    ATTRIBUTE       shift and go to state 3
+
+    expression                     shift and go to state 17
+
+state 9
+
+    (6) expression -> LPAREN expression . RPAREN
+    (1) expression -> expression . AND expression
+    (2) expression -> expression . OR expression
+    (3) expression -> expression . GT expression
+    (4) expression -> expression . LT expression
+    (5) expression -> expression . EQ expression
+
+    RPAREN          shift and go to state 18
+    AND             shift and go to state 4
+    OR              shift and go to state 5
+    GT              shift and go to state 6
+    LT              shift and go to state 7
+    EQ              shift and go to state 8
+
+
+state 10
+
+    (7) expression -> ATTRIBUTE GT . NUMBER
+
+    NUMBER          shift and go to state 19
+
+
+state 11
+
+    (8) expression -> ATTRIBUTE LT . NUMBER
+
+    NUMBER          shift and go to state 20
+
+
+state 12
+
+    (9) expression -> ATTRIBUTE EQ . STRING
+
+    STRING          shift and go to state 21
+
+
+state 13
+
+    (1) expression -> expression AND expression .
+    (1) expression -> expression . AND expression
+    (2) expression -> expression . OR expression
+    (3) expression -> expression . GT expression
+    (4) expression -> expression . LT expression
+    (5) expression -> expression . EQ expression
+
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for GT resolved as shift
+  ! shift/reduce conflict for LT resolved as shift
+  ! shift/reduce conflict for EQ resolved as shift
+    $end            reduce using rule 1 (expression -> expression AND expression .)
+    RPAREN          reduce using rule 1 (expression -> expression AND expression .)
+    AND             shift and go to state 4
+    OR              shift and go to state 5
+    GT              shift and go to state 6
+    LT              shift and go to state 7
+    EQ              shift and go to state 8
+
+  ! AND             [ reduce using rule 1 (expression -> expression AND expression .) ]
+  ! OR              [ reduce using rule 1 (expression -> expression AND expression .) ]
+  ! GT              [ reduce using rule 1 (expression -> expression AND expression .) ]
+  ! LT              [ reduce using rule 1 (expression -> expression AND expression .) ]
+  ! EQ              [ reduce using rule 1 (expression -> expression AND expression .) ]
+
+
+state 14
+
+    (2) expression -> expression OR expression .
+    (1) expression -> expression . AND expression
+    (2) expression -> expression . OR expression
+    (3) expression -> expression . GT expression
+    (4) expression -> expression . LT expression
+    (5) expression -> expression . EQ expression
+
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for GT resolved as shift
+  ! shift/reduce conflict for LT resolved as shift
+  ! shift/reduce conflict for EQ resolved as shift
+    $end            reduce using rule 2 (expression -> expression OR expression .)
+    RPAREN          reduce using rule 2 (expression -> expression OR expression .)
+    AND             shift and go to state 4
+    OR              shift and go to state 5
+    GT              shift and go to state 6
+    LT              shift and go to state 7
+    EQ              shift and go to state 8
+
+  ! AND             [ reduce using rule 2 (expression -> expression OR expression .) ]
+  ! OR              [ reduce using rule 2 (expression -> expression OR expression .) ]
+  ! GT              [ reduce using rule 2 (expression -> expression OR expression .) ]
+  ! LT              [ reduce using rule 2 (expression -> expression OR expression .) ]
+  ! EQ              [ reduce using rule 2 (expression -> expression OR expression .) ]
+
+
+state 15
+
+    (3) expression -> expression GT expression .
+    (1) expression -> expression . AND expression
+    (2) expression -> expression . OR expression
+    (3) expression -> expression . GT expression
+    (4) expression -> expression . LT expression
+    (5) expression -> expression . EQ expression
+
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for GT resolved as shift
+  ! shift/reduce conflict for LT resolved as shift
+  ! shift/reduce conflict for EQ resolved as shift
+    $end            reduce using rule 3 (expression -> expression GT expression .)
+    RPAREN          reduce using rule 3 (expression -> expression GT expression .)
+    AND             shift and go to state 4
+    OR              shift and go to state 5
+    GT              shift and go to state 6
+    LT              shift and go to state 7
+    EQ              shift and go to state 8
+
+  ! AND             [ reduce using rule 3 (expression -> expression GT expression .) ]
+  ! OR              [ reduce using rule 3 (expression -> expression GT expression .) ]
+  ! GT              [ reduce using rule 3 (expression -> expression GT expression .) ]
+  ! LT              [ reduce using rule 3 (expression -> expression GT expression .) ]
+  ! EQ              [ reduce using rule 3 (expression -> expression GT expression .) ]
+
+
+state 16
+
+    (4) expression -> expression LT expression .
+    (1) expression -> expression . AND expression
+    (2) expression -> expression . OR expression
+    (3) expression -> expression . GT expression
+    (4) expression -> expression . LT expression
+    (5) expression -> expression . EQ expression
+
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for GT resolved as shift
+  ! shift/reduce conflict for LT resolved as shift
+  ! shift/reduce conflict for EQ resolved as shift
+    $end            reduce using rule 4 (expression -> expression LT expression .)
+    RPAREN          reduce using rule 4 (expression -> expression LT expression .)
+    AND             shift and go to state 4
+    OR              shift and go to state 5
+    GT              shift and go to state 6
+    LT              shift and go to state 7
+    EQ              shift and go to state 8
+
+  ! AND             [ reduce using rule 4 (expression -> expression LT expression .) ]
+  ! OR              [ reduce using rule 4 (expression -> expression LT expression .) ]
+  ! GT              [ reduce using rule 4 (expression -> expression LT expression .) ]
+  ! LT              [ reduce using rule 4 (expression -> expression LT expression .) ]
+  ! EQ              [ reduce using rule 4 (expression -> expression LT expression .) ]
+
+
+state 17
+
+    (5) expression -> expression EQ expression .
+    (1) expression -> expression . AND expression
+    (2) expression -> expression . OR expression
+    (3) expression -> expression . GT expression
+    (4) expression -> expression . LT expression
+    (5) expression -> expression . EQ expression
+
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for GT resolved as shift
+  ! shift/reduce conflict for LT resolved as shift
+  ! shift/reduce conflict for EQ resolved as shift
+    $end            reduce using rule 5 (expression -> expression EQ expression .)
+    RPAREN          reduce using rule 5 (expression -> expression EQ expression .)
+    AND             shift and go to state 4
+    OR              shift and go to state 5
+    GT              shift and go to state 6
+    LT              shift and go to state 7
+    EQ              shift and go to state 8
+
+  ! AND             [ reduce using rule 5 (expression -> expression EQ expression .) ]
+  ! OR              [ reduce using rule 5 (expression -> expression EQ expression .) ]
+  ! GT              [ reduce using rule 5 (expression -> expression EQ expression .) ]
+  ! LT              [ reduce using rule 5 (expression -> expression EQ expression .) ]
+  ! EQ              [ reduce using rule 5 (expression -> expression EQ expression .) ]
+
+
+state 18
+
+    (6) expression -> LPAREN expression RPAREN .
+
+    AND             reduce using rule 6 (expression -> LPAREN expression RPAREN .)
+    OR              reduce using rule 6 (expression -> LPAREN expression RPAREN .)
+    GT              reduce using rule 6 (expression -> LPAREN expression RPAREN .)
+    LT              reduce using rule 6 (expression -> LPAREN expression RPAREN .)
+    EQ              reduce using rule 6 (expression -> LPAREN expression RPAREN .)
+    $end            reduce using rule 6 (expression -> LPAREN expression RPAREN .)
+    RPAREN          reduce using rule 6 (expression -> LPAREN expression RPAREN .)
+
+
+state 19
+
+    (7) expression -> ATTRIBUTE GT NUMBER .
+
+    AND             reduce using rule 7 (expression -> ATTRIBUTE GT NUMBER .)
+    OR              reduce using rule 7 (expression -> ATTRIBUTE GT NUMBER .)
+    GT              reduce using rule 7 (expression -> ATTRIBUTE GT NUMBER .)
+    LT              reduce using rule 7 (expression -> ATTRIBUTE GT NUMBER .)
+    EQ              reduce using rule 7 (expression -> ATTRIBUTE GT NUMBER .)
+    $end            reduce using rule 7 (expression -> ATTRIBUTE GT NUMBER .)
+    RPAREN          reduce using rule 7 (expression -> ATTRIBUTE GT NUMBER .)
+
+
+state 20
+
+    (8) expression -> ATTRIBUTE LT NUMBER .
+
+    AND             reduce using rule 8 (expression -> ATTRIBUTE LT NUMBER .)
+    OR              reduce using rule 8 (expression -> ATTRIBUTE LT NUMBER .)
+    GT              reduce using rule 8 (expression -> ATTRIBUTE LT NUMBER .)
+    LT              reduce using rule 8 (expression -> ATTRIBUTE LT NUMBER .)
+    EQ              reduce using rule 8 (expression -> ATTRIBUTE LT NUMBER .)
+    $end            reduce using rule 8 (expression -> ATTRIBUTE LT NUMBER .)
+    RPAREN          reduce using rule 8 (expression -> ATTRIBUTE LT NUMBER .)
+
+
+state 21
+
+    (9) expression -> ATTRIBUTE EQ STRING .
+
+    AND             reduce using rule 9 (expression -> ATTRIBUTE EQ STRING .)
+    OR              reduce using rule 9 (expression -> ATTRIBUTE EQ STRING .)
+    GT              reduce using rule 9 (expression -> ATTRIBUTE EQ STRING .)
+    LT              reduce using rule 9 (expression -> ATTRIBUTE EQ STRING .)
+    EQ              reduce using rule 9 (expression -> ATTRIBUTE EQ STRING .)
+    $end            reduce using rule 9 (expression -> ATTRIBUTE EQ STRING .)
+    RPAREN          reduce using rule 9 (expression -> ATTRIBUTE EQ STRING .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for AND in state 13 resolved as shift
+WARNING: shift/reduce conflict for OR in state 13 resolved as shift
+WARNING: shift/reduce conflict for GT in state 13 resolved as shift
+WARNING: shift/reduce conflict for LT in state 13 resolved as shift
+WARNING: shift/reduce conflict for EQ in state 13 resolved as shift
+WARNING: shift/reduce conflict for AND in state 14 resolved as shift
+WARNING: shift/reduce conflict for OR in state 14 resolved as shift
+WARNING: shift/reduce conflict for GT in state 14 resolved as shift
+WARNING: shift/reduce conflict for LT in state 14 resolved as shift
+WARNING: shift/reduce conflict for EQ in state 14 resolved as shift
+WARNING: shift/reduce conflict for AND in state 15 resolved as shift
+WARNING: shift/reduce conflict for OR in state 15 resolved as shift
+WARNING: shift/reduce conflict for GT in state 15 resolved as shift
+WARNING: shift/reduce conflict for LT in state 15 resolved as shift
+WARNING: shift/reduce conflict for EQ in state 15 resolved as shift
+WARNING: shift/reduce conflict for AND in state 16 resolved as shift
+WARNING: shift/reduce conflict for OR in state 16 resolved as shift
+WARNING: shift/reduce conflict for GT in state 16 resolved as shift
+WARNING: shift/reduce conflict for LT in state 16 resolved as shift
+WARNING: shift/reduce conflict for EQ in state 16 resolved as shift
+WARNING: shift/reduce conflict for AND in state 17 resolved as shift
+WARNING: shift/reduce conflict for OR in state 17 resolved as shift
+WARNING: shift/reduce conflict for GT in state 17 resolved as shift
+WARNING: shift/reduce conflict for LT in state 17 resolved as shift
+WARNING: shift/reduce conflict for EQ in state 17 resolved as shift
